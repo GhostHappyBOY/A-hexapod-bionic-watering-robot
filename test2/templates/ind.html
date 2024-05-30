@@ -1,0 +1,224 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六足机器人操作系统</title>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <style>
+        body {
+        background-color: #e4e4e4;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .m {
+            text-align: center;
+        }
+        .contr {
+            position: relative;
+            width: 150px;
+            height: 90px;
+            left: 50%;
+            margin-left: -75px;
+        }
+        .block {
+            width: 48px;
+            height: 28px;
+            border: 1px solid #336699;
+        }
+        #up,
+        #stop,
+        #down,
+        #left,
+        #right {
+            position: absolute;
+            background-color: #1EAEDB;
+        }
+        #up {
+            left: 50%;
+            margin-left: -24px;
+        }
+        #up::after {
+            content: '向前';
+        }
+        #stop {
+            top: 50%;
+            margin-top: -14px;
+            left: 50%;
+            margin-left: -24px;
+        }
+        #stop::after {
+            content: '重启';
+        }
+        #down {
+            bottom: 0;
+            left: 50%;
+            margin-left: -24px;
+        }
+        #down::after {
+            content: '向后';
+        }
+        #left {
+            top: 50%;
+            margin-top: -14px;
+            margin-left: 0;
+        }
+        #left::after {
+            content: '向左';
+        }
+        #right {
+            top: 50%;
+            margin-top: -14px;
+            margin-left: 102px;
+        }
+        #right::after {
+            content: '向右';
+        }
+        .data {
+            position: relative;
+            height: 70px;
+        }
+        .tem,
+        .hum,
+        .tim,
+        #temp,
+        #humi,
+        #time {
+            position: absolute;
+            display: inline-block;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        #temp {
+            font-weight: 400;
+            left: 45px;
+            top: 2px;
+        }
+        #humi {
+            top: 2px;
+            font-weight: 400;
+            right: 28px;
+        }
+        #time {
+            font-weight: 400;
+            bottom: 0;
+            left: 50%;
+            margin-left: -28px;
+        }
+        .hum {
+            right: 50px;
+        }
+        .tim {
+            bottom: 0;
+            left: 50%;
+            margin-left: -80px;
+        }
+        .action_f {
+            position: relative;
+            height: 30px;
+        }
+        #catch,
+        #spray,
+        #stoop {
+            position: absolute;
+            width: 30px;
+            height: 100%;
+            border: 1px solid #336699;
+            background-color: #1EAEDB;
+        }
+        #stoop {
+            right: 0;
+        }
+        #spray {
+            left: 50%;
+            margin-left: -15px;
+        }
+        .action_s {
+            position: relative;
+            height: 60px;
+        }
+        .action_s h2 {
+            text-align: center;
+        }
+        #one,
+        #two,
+        #three {
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            border: 1px solid #336699;
+            background-color: #1EAEDB;
+        }
+        #two {
+            left: 50%;
+            margin-left: -20px;
+        }
+        #three {
+            right: 0;
+        }
+        img {
+            position: relative;
+            width: 330px;
+            height: 200px;
+            left: 50%;
+            margin-left: -165px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            setInterval(function () {
+                $.get("/data", function (result, status) {
+                    console.log(result)
+                    $("#temp").html(result.hum)
+                    $("#humi").html(result.tem)
+                    $("#time").html(result.tim)
+                });
+            }, 1000);
+
+            $("button").click(function () {
+                $.post("/cmd", this.id, function (data, status) {
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="container" class="container">
+    <div>
+        <h1 class="m">六足机器人控制平台</h1>
+    </div>
+
+    <div class="contr">
+        <button id="up" name="up" class="block"></button>
+        <button id='left' name="left" class="block"></button>
+        <button id='stop' name="stop" class="block"></button>
+        <button id='right' name="right" class="block"></button>
+        <button id='down' name="down" class="block"></button>
+    </div>
+    <div class="data">
+        <p class="tem"> 温度: </p>
+        <i id="temp">1</i>
+        <p class="hum"> 湿度: </p>
+        <i id="humi">2</i>
+        <p class="tim">时间: </p>
+        <i id="time">3</i>
+    </div>
+    <hr>
+    <div class="action_f">
+        <button id="catch">夹紧</button>
+        <button id="spray">浇水</button>
+        <button id="stoop">弯腰</button>
+    </div>
+    <div class="action_s">
+        <h2>动作组</h2>
+        <button id="one">拜年</button>
+        <button id="two">松开</button>
+        <button id="three">停止</button>
+    </div>
+    <hr>
+    <img id="bg" src="{{ url_for('video_feed') }}">
+</div>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</body>
+</html>

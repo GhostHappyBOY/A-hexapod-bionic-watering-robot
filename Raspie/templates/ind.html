@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六足机器人操作系统</title>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <style type="text/css">
+        #up {
+            margin-left: 140px;
+            margin-bottom: 3px;
+        }
+
+        #down {
+            margin-top: 3px;
+            margin-left: 140px;
+        }
+
+        #left {
+            margin-top: 3px;
+            margin-left: 84px;
+        }
+
+        .hum {
+            margin-left: 210px;
+        }
+
+        .tim {
+            margin-top: 3px;
+            margin-left: 115px;
+        }
+
+        .pos {
+            margin-left: 86px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            setInterval(function () {
+                $.get("/data", function (result, status) {
+                    console.log(result)
+                    $("#temp").html(result.hum)
+                    $("#humi").html(result.tem)
+                    $("#time").html(result.tim)
+                });
+            }, 1000);
+
+            $("button").click(function () {
+                $.post("/cmd", this.id, function (data, status) {
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="container" class="container">
+    <div>
+        <h1 style="background: #d0e9c6">六足机器人控制平台</h1>
+        <button id="up" class="btn btn-lg btn-primary glyphicon glyphicon-circle-arrow-up"></button>
+    </div>
+    <div>
+        <button id='left' name="left" class="btn btn-lg btn-primary glyphicon glyphicon-circle-arrow-left"></button>
+        <button id='stop' class="btn btn-lg btn-primary glyphicon glyphicon-stop"></button>
+        <button id='right' class="btn btn-lg btn-primary glyphicon glyphicon-circle-arrow-right"></button>
+    </div>
+    <div>
+        <button id='down' class="btn btn-lg btn-primary glyphicon glyphicon-circle-arrow-down"></button>
+    </div>
+    <div>
+        温度: <i id="temp" style="display: inline"></i>
+        <p class="hum" style="display: inline">湿度: </p>
+        <i id="humi" style="display: inline"></i>
+    </div>
+    <div>
+        <p class="tim" style="display: inline">时间: </p>
+        <i id="time" style="display: inline"></i>
+    </div>
+    <hr>
+    <div>
+        <button id="catch" style="width: 50px;height: 40px">抓取</button>
+        <button id="spray" style="width: 50px;height: 40px" class="pos">喷水</button>
+        <button id="stoop" style="width: 50px;height: 40px" class="pos">弯腰</button>
+    </div>
+    <div>
+        <h2 style="background: #c7ddef;margin-left: 118px; width: 93px">动作组</h2>
+        <button id="1" style="width: 50px;height: 40px">动作1</button>
+        <button id="2" style="width: 50px;height: 40px" class="pos">动作2</button>
+        <button id="3" style="width: 50px;height: 40px" class="pos">动作3</button>
+    </div>
+    <hr>
+    <img id="bg" src="{{ url_for('video_feed') }}" width="330" height="200">
+</div>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</body>
+</html>
